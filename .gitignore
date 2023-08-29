@@ -1,1 +1,3 @@
 auth_info_goyalinfocom/
+node_modules/
+package-lock.json
