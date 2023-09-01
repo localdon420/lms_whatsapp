@@ -1,4 +1,5 @@
 const Request = require('request-promise');
+const fs = require('fs');
 
 
 
@@ -82,19 +83,56 @@ class LMS{
 
         events.forEach(week => {
             // console.log(week);
-
             week.days.forEach(day => {
-                 day.events.forEach(event => {
-                    finalEvents.push(event);
+                 day.events.forEach(e => {
+                    finalEvents.push({id:e.id,name:e.name,cname:e.course.fullname,url:e.url,start:e.timestart,end:(e.timestart + e.timeduration)});
                  });
             });
             
         });
 
-        return JSON.stringify(finalEvents);
+        // return JSON.stringify(finalEvents);
+        fs.writeFile('events.json', JSON.stringify(finalEvents), (err) => {
+          if (err) {
+            console.error('Error writing to file:', err);
+          } else {
+            console.log('Data has been written to the file.');
+          }
+        });
 
+        
       }
     }
+
+    getCurrentEvent (eventLst){
+      var current_time = new Date().getTime() / 1000;
+      for (var i = 0; i < eventLst.length; i++) {
+          if (eventLst[i]['start'] <= current_time && current_time <= eventLst[i]['end']) {
+              return eventLst[i];
+          }
+      }
+      return null;
+  }
+
+
+   async applyAttendance(code_qr){
+    var events = require('./events'); // no need to add the .json extension
+    var event = this.getCurrentEvent(events);
+    if(event){
+      var link = event.url; 
+      var res = await this.req.get(link);
+      var sessId = res.match(/name="sessid" value="(.*)"/)[1];
+      var final_aten = `https://lms.thapar.edu/moodle/mod/attendance/attendance.php?sessid=${sessId}&qrpass=${code_qr}`;
+      var final_aten_res = await this.req.get(final_aten);
+      console.log("Attendance Lag Gyi!");
+      // console.log(event);
+    }else{
+      console.log("No attendance event found");
+    }
+    // data = JSON.parse(data);
+    }
+
+
 }
 
 module.exports = LMS;
