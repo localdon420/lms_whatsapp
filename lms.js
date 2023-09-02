@@ -8,6 +8,7 @@ class LMS{
     password;
     req;
     sessKey;
+    events;
 
     constructor(username,password){
         this.username = username;
@@ -91,14 +92,16 @@ class LMS{
             
         });
 
+        this.events = finalEvents;
+
         // return JSON.stringify(finalEvents);
-        fs.writeFile('events.json', JSON.stringify(finalEvents), (err) => {
-          if (err) {
-            console.error('Error writing to file:', err);
-          } else {
-            console.log('Data has been written to the file.');
-          }
-        });
+        // fs.writeFile('events.json', JSON.stringify(finalEvents), (err) => {
+        //   if (err) {
+        //     console.error('Error writing to file:', err);
+        //   } else {
+        //     console.log('Data has been written to the file.');
+        //   }
+        // });
 
         
       }
@@ -116,8 +119,8 @@ class LMS{
 
 
    async applyAttendance(code_qr){
-    var events = require('./events'); // no need to add the .json extension
-    var event = this.getCurrentEvent(events);
+    // var events = require('./events'); // no need to add the .json extension
+    var event = this.getCurrentEvent(this.events);
     if(event){
       var link = event.url; 
       var res = await this.req.get(link);
