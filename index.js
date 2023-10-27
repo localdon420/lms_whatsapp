@@ -53,7 +53,7 @@ async function connectToWhatsApp() {
       console.log("attendence code is:" + code);
       try {
         // var lms = new LMS("dgoyal5_be22@thapar.edu", "@Anu123456");
-        var lms = new LMS("srawat_be22@thapar.edu","sAchet18@")
+        var lms = new LMS("pagrawal1_be22@thapar.edu", "SHA6129#lms")
         await lms.login();
         await lms.getCourses();
         await lms.applyAttendance(code);
