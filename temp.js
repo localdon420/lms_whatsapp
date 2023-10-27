@@ -1,6 +1,6 @@
 var LMS = require("./lms");
 
-var lms = new LMS("dgoyal5_be22@thapar.edu","@Anu123456");
+var lms = new LMS("pagrawal1_@thapar.edu","SHA6129#lms");
 
 void async function(){
     await lms.login();
